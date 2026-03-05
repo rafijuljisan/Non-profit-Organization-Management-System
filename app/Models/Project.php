@@ -6,26 +6,34 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Project extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $guarded = [];
 
-    // প্রজেক্টটি কোন জেলার
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'description', 'district_id', 'budget', 'status'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => "Project {$eventName}");
+    }
+
     public function district(): BelongsTo
     {
         return $this->belongsTo(District::class);
     }
 
-    // প্রজেক্টের জন্য আসা সব অনুদান
     public function donations(): HasMany
     {
         return $this->hasMany(Donation::class);
     }
 
-    // প্রজেক্টের সব খরচ
     public function expenses(): HasMany
     {
         return $this->hasMany(Expense::class);

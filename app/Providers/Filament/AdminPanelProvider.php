@@ -37,6 +37,11 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            ->resources([
+                \App\Filament\Resources\Users\UserResource::class,
+                \App\Filament\Resources\Pages\PageResource::class,
+                \App\Filament\Resources\ActivityLogResource::class, // ✅ your manual one
+            ])
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
