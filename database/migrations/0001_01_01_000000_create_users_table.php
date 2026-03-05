@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,12 +12,23 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('member_id')->unique()->nullable(); // e.g., BD-DHA-2026-0001
+            $table->foreignId('district_id')->nullable(); // will constrain later
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone')->unique()->nullable();
+            $table->string('nid_number')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            // Membership specific fields
+            $table->decimal('monthly_fee', 10, 2)->default(0);
+            $table->enum('status', ['pending', 'active', 'suspended', 'inactive'])->default('pending');
+            $table->date('join_date')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes(); // Soft Delete Protection
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
