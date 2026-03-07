@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Donation;
 use App\Models\Subscription;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\InquiryController;
 
 // --- Existing Routes ---
 Route::get('/', function () {
@@ -36,3 +37,8 @@ Route::view('/financial-transparency', 'pages.transparency')->name('transparency
 // Volunteer & Contact (We will create controllers for these later so users can submit forms)
 Route::view('/volunteer', 'pages.volunteer')->name('volunteer');
 Route::view('/contact', 'pages.contact')->name('contact');
+
+// ফর্ম সাবমিট করার রাউট (Spam কমানোর জন্য রেট লিমিট দেওয়া হলো)
+Route::post('/inquiry/submit', [InquiryController::class, 'store'])
+    ->name('inquiry.store')
+    ->middleware('throttle:3,1'); // প্রতি মিনিটে সর্বোচ্চ ৩টি মেসেজ
