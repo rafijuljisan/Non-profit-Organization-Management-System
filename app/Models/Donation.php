@@ -24,6 +24,10 @@ class Donation extends Model
             ->setDescriptionForEvent(fn (string $eventName) => "Donation {$eventName}");
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);

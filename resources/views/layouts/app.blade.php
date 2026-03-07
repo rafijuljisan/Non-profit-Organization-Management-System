@@ -20,7 +20,7 @@
                 <a href="{{ route('transparency') }}" class="hover:text-blue-200 transition">Transparency</a>
                 <a href="{{ route('volunteer') }}" class="hover:text-blue-200 transition">Volunteer</a>
                 <a href="{{ route('contact') }}" class="hover:text-blue-200 transition">Contact</a>
-                
+                <a href="{{ route('receipt.search') }}" class="hover:text-blue-200 transition font-semibold">Find Receipt</a>
                 <a href="{{ route('donate.index') }}" class="bg-green-500 text-white px-5 py-2 rounded-full hover:bg-green-600 transition shadow-md">Donate Now</a>
                 <a href="{{ url('/admin') }}" class="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-gray-100 transition shadow-sm">Login</a>
             </div>

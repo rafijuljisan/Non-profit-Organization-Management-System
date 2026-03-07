@@ -28,6 +28,8 @@ Route::get('/projects', function () {
 
 Route::get('/donate', [DonationController::class, 'index'])->name('donate.index');
 Route::post('/donate', [DonationController::class, 'store'])->name('donate.store')->middleware('throttle:5,1');
+Route::get('/donate/receipt/{id}', [DonationController::class, 'downloadReceipt'])->name('donate.receipt');
+Route::get('/find-receipts', [DonationController::class, 'searchReceipt'])->name('receipt.search');
 
 // --- 🟢 NEW STATIC ROUTES ---
 Route::view('/about', 'pages.about')->name('about');

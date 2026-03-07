@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\User;
 use App\Models\District; // Import the District model
+use App\Models\Donation; // <-- 🚀 এই লাইনটি যুক্ত করা হয়েছে
 use Carbon\Carbon;       // Import Carbon for date/time operations
 
 class UserObserver
@@ -38,7 +39,22 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        // Code to run after the user is fully created
+        // 🚀 অটো-সিঙ্ক লজিক: 
+        // নতুন অ্যাকাউন্ট খোলা ইউজারের ফোন নাম্বারের সাথে আগের কোনো গেস্ট ডোনেশনের ফোন নাম্বার মিলে গেলে,
+        // সেই ডোনেশনগুলোতে এই ইউজারের আইডি (user_id) বসিয়ে দেওয়া হবে।
+        
+        Donation::whereNull('user_id')
+            ->where('donor_phone', $user->phone)
+            ->update(['user_id' => $user->id]);
+            
+        // (যদি আপনার ডোনেশন ফর্মে ইমেইল নেওয়ার অপশন থাকে, তাহলে নিচের লাইনটিও আনকমেন্ট করতে পারেন)
+        /*
+        if ($user->email) {
+            Donation::whereNull('user_id')
+                ->where('donor_email', $user->email)
+                ->update(['user_id' => $user->id]);
+        }
+        */
     }
 
     /**
