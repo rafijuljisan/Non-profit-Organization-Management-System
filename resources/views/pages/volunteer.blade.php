@@ -129,45 +129,10 @@
                 স্বেচ্ছাসেবক হিসেবে নিবন্ধন করুন এবং আমাদের পরিবারের অংশ হোন।
             </p>
 
-            {{-- Volunteer Form --}}
-            <form action="{{ route('inquiry.store') }}" method="POST"
-                class="max-w-lg mx-auto bg-white bg-opacity-10 rounded-2xl p-6 text-left space-y-4">
-                @csrf
-                <input type="hidden" name="type" value="volunteer">
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-blue-100 text-xs font-semibold mb-1">পূর্ণ নাম *</label>
-                        <input type="text" name="name" required
-                            placeholder="আপনার নাম"
-                            class="w-full px-4 py-2.5 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50">
-                    </div>
-                    <div>
-                        <label class="block text-blue-100 text-xs font-semibold mb-1">মোবাইল নম্বর *</label>
-                        <input type="text" name="phone" required
-                            placeholder="০১XXXXXXXXX"
-                            class="w-full px-4 py-2.5 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-blue-100 text-xs font-semibold mb-1">বার্তা</label>
-                    <textarea name="message" rows="2"
-                        placeholder="কেন আপনি স্বেচ্ছাসেবক হতে চান?"
-                        class="w-full px-4 py-2.5 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 resize-none"></textarea>
-                </div>
-
-                @if(session('success') && request()->get('from') === 'volunteer')
-                <div class="bg-green-500 bg-opacity-30 text-white text-sm px-4 py-2 rounded-lg">
-                    {{ session('success') }}
-                </div>
-                @endif
-
-                <button type="submit"
-                    class="w-full bg-white text-blue-700 font-extrabold py-3 rounded-xl hover:bg-blue-50 transition shadow-md text-sm">
-                    স্বেচ্ছাসেবক হিসেবে আবেদন করুন
-                </button>
-            </form>
+            <a href="{{ route('contact') }}"
+                class="inline-block bg-white text-blue-700 font-extrabold px-10 py-4 rounded-full hover:bg-blue-50 transition shadow-md text-sm">
+                🤝 যোগাযোগ করুন ও আবেদন করুন
+            </a>
 
         </div>
     </div>
