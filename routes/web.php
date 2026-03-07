@@ -7,7 +7,22 @@ use App\Models\Donation;
 use App\Models\Subscription;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\DonorAuthController;
 
+// 🟢 Guest Routes (লগইন ছাড়া দেখা যাবে)
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [DonorAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [DonorAuthController::class, 'login'])->name('login.post');
+    Route::get('/register', [DonorAuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [DonorAuthController::class, 'register'])->name('register.post');
+});
+
+// 🟢 Auth Routes (লগইন করার পর দেখা যাবে)
+Route::middleware('auth')->group(function () {
+    Route::get('/donor/dashboard', [DonorAuthController::class, 'dashboard'])->name('donor.dashboard');
+    Route::post('/logout', [DonorAuthController::class, 'logout'])->name('logout');
+});
 // --- Existing Routes ---
 Route::get('/', function () {
     $totalMembers = User::where('status', 'active')->count();
@@ -44,3 +59,5 @@ Route::view('/contact', 'pages.contact')->name('contact');
 Route::post('/inquiry/submit', [InquiryController::class, 'store'])
     ->name('inquiry.store')
     ->middleware('throttle:3,1'); // প্রতি মিনিটে সর্বোচ্চ ৩টি মেসেজ
+
+Route::get('/financial-transparency', [FrontendController::class, 'transparency'])->name('transparency');

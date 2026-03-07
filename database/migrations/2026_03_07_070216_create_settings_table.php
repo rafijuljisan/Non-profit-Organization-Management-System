@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
+            $table->string('site_name')->default('NGO Foundation');
+            $table->string('site_logo')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->text('address')->nullable();
+            $table->string('facebook_url')->nullable();
+            $table->string('youtube_url')->nullable();
+            $table->text('about_footer')->nullable();
             $table->timestamps();
         });
     }

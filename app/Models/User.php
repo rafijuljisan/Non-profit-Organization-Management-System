@@ -41,9 +41,15 @@ class User extends Authenticatable implements FilamentUser
             ->setDescriptionForEvent(fn (string $eventName) => "User {$eventName}");
     }
 
+    // 🚀 NEW: Admin Access Security Logic
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->status === 'active';
+        // শর্ত ১: ইউজারের স্ট্যাটাস 'active' হতে হবে
+        // শর্ত ২: ইউজারের ইমেইল থাকতে হবে (কারণ সাধারণ ডোনাররা ইমেইল ছাড়া অ্যাকাউন্ট খোলে)
+        return $this->status === 'active' && !empty($this->email);
+
+        // 💡 (বিকল্প লজিক): আপনি যেহেতু Spatie Roles ব্যবহার করছেন, চাইলে নিচের লাইনটিও ব্যবহার করতে পারেন:
+        // return $this->status === 'active' && $this->hasRole(['admin', 'super_admin']);
     }
 
     public function district(): BelongsTo

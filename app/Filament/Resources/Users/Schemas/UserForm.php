@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use Filament\Schemas\Components\Section;  // ✅ v4 namespace
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
 
 class UserForm
@@ -13,6 +14,20 @@ class UserForm
     {
         return $schema
             ->components([
+
+                Section::make('Profile Photo')
+                    ->schema([
+                        FileUpload::make('photo')
+                            ->image()
+                            ->disk('public')
+                            ->directory('members/photos')
+                            ->imageEditor()
+                            ->circleCropper()
+                            ->maxSize(2048)
+                            ->label('Member Photo')
+                            ->columnSpanFull(),
+                    ]),
+
                 Section::make('Personal Information')
                     ->schema([
                         TextInput::make('name')
@@ -26,11 +41,13 @@ class UserForm
                             ->tel()
                             ->unique(ignoreRecord: true),
                         TextInput::make('nid_number')
+                            ->label('NID Number')
                             ->unique(ignoreRecord: true),
                         TextInput::make('password')
                             ->password()
                             ->dehydrated(fn (?string $state) => filled($state))
-                            ->required(fn (string $operation): bool => $operation === 'create'),
+                            ->required(fn (string $operation): bool => $operation === 'create')
+                            ->columnSpanFull(),
                     ])->columns(2),
 
                 Section::make('Membership Details')
@@ -49,14 +66,15 @@ class UserForm
                             ->prefix('৳'),
                         Select::make('status')
                             ->options([
-                                'pending' => 'Pending',
-                                'active' => 'Active',
+                                'pending'   => 'Pending',
+                                'active'    => 'Active',
                                 'suspended' => 'Suspended',
-                                'inactive' => 'Inactive',
+                                'inactive'  => 'Inactive',
                             ])
                             ->default('pending')
                             ->required(),
                     ])->columns(2),
+
             ]);
     }
 }
