@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use App\Models\Designation;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
@@ -60,6 +62,13 @@ class UserForm
                             ->relationship('district', 'name')
                             ->searchable()
                             ->preload(),
+                        Select::make('designation')
+                            ->label('Designation')
+                            ->options(
+                                Designation::orderBy('priority')->pluck('name', 'name')
+                            )
+                            ->searchable()
+                            ->placeholder('Select designation'),
                         TextInput::make('monthly_fee')
                             ->numeric()
                             ->default(0)
@@ -73,6 +82,10 @@ class UserForm
                             ])
                             ->default('pending')
                             ->required(),
+                        Toggle::make('show_in_volunteer')
+                            ->label('Show in Volunteer Page')
+                            ->default(true)
+                            ->inline(false),
                     ])->columns(2),
 
             ]);

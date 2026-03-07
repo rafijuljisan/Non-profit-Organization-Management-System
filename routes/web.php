@@ -9,6 +9,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\DonorAuthController;
+use App\Http\Controllers\VolunteerController;
 
 // 🟢 Guest Routes (লগইন ছাড়া দেখা যাবে)
 Route::middleware('guest')->group(function () {
@@ -52,7 +53,7 @@ Route::view('/mission-vision', 'pages.mission')->name('mission');
 Route::view('/financial-transparency', 'pages.transparency')->name('transparency');
 
 // Volunteer & Contact (We will create controllers for these later so users can submit forms)
-Route::view('/volunteer', 'pages.volunteer')->name('volunteer');
+Route::get('/volunteer', [VolunteerController::class, 'index'])->name('volunteer'); // এই পেজে ভলান্টিয়ারদের তালিকা দেখানো হবে
 Route::view('/contact', 'pages.contact')->name('contact');
 
 // ফর্ম সাবমিট করার রাউট (Spam কমানোর জন্য রেট লিমিট দেওয়া হলো)
