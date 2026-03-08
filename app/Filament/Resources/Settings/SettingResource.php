@@ -7,6 +7,8 @@ use App\Filament\Resources\Settings\Pages\ListSettings;
 use App\Filament\Resources\Settings\Schemas\SettingForm;
 use App\Filament\Resources\Settings\Tables\SettingsTable;
 use App\Models\Setting;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth; // 🚀 Added proper Auth Facade
 use BackedEnum;
 use UnitEnum;
 use Filament\Resources\Resource;
@@ -22,8 +24,26 @@ class SettingResource extends Resource
     protected static string|UnitEnum|null $navigationGroup = 'System Management';
     protected static ?string $navigationLabel = 'Site Settings';
 
-    public static function canCreate(): bool { return false; }
-    public static function canDelete($record): bool { return false; }
+    // 🛡️ Security: Only super_admin can see this menu in the sidebar
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user(); // 🚀 Using the Facade prevents the undefined method error
+        
+        return $user !== null && $user->hasRole('super_admin'); 
+    }
+
+    // 🛡️ Action Security: Disable creating new settings rows
+    public static function canCreate(): bool 
+    { 
+        return false; 
+    }
+
+    // 🛡️ Action Security: Disable deleting the settings row
+    public static function canDelete(Model $record): bool 
+    { 
+        return false; 
+    }
 
     public static function form(Schema $schema): Schema
     {

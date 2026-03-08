@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class DonationResource extends Resource
 {
@@ -32,6 +33,17 @@ class DonationResource extends Resource
         return DonationsTable::configure($table);
     }
 
+    // 🛡️ Financial Security: Disable deleting a single donation
+    public static function canDelete(Model $record): bool 
+    {
+        return false;
+    }
+
+    // 🛡️ Financial Security: Disable bulk deleting donations
+    public static function canDeleteAny(): bool 
+    {
+        return false;
+    }
     public static function getPages(): array
     {
         return [

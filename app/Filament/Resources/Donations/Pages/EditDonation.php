@@ -13,7 +13,8 @@ class EditDonation extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            // 🛡️ Financial Security: Disable the delete action for donations
+            // DeleteAction::make(), --- IGNORE ---
         ];
     }
 }

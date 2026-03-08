@@ -9,6 +9,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder; // 🚀 এটি ইমপোর্ট করতে হবে
+use Illuminate\Support\Facades\Auth;
 
 class UserForm
 {
@@ -47,9 +49,28 @@ class UserForm
                             ->unique(ignoreRecord: true),
                         TextInput::make('password')
                             ->password()
-                            ->dehydrated(fn (?string $state) => filled($state))
-                            ->required(fn (string $operation): bool => $operation === 'create')
+                            ->dehydrated(fn(?string $state) => filled($state))
+                            ->required(fn(string $operation): bool => $operation === 'create')
                             ->columnSpanFull(),
+                        Select::make('roles')
+                            ->relationship('roles', 'name', modifyQueryUsing: function (Builder $query) {
+                                /** @var \App\Models\User|null $user */
+                                $user = Auth::user();
+
+                                // যদি বর্তমান ইউজার 'super_admin' না হয়, তবে সে রোল সিলেক্ট করার লিস্টে 'super_admin' অপশনটি দেখতে পাবে না।
+                                if ($user !== null && !$user->hasRole('super_admin')) {
+                                    $query->where('name', '!=', 'super_admin');
+
+                                    // 💡 (ঐচ্ছিক) যদি চান District Admin শুধু সাধারণ User বা Volunteer তৈরি করতে পারবে, তবে নিচের লাইনটি ব্যবহার করতে পারেন:
+                                    // $query->whereIn('name', ['Volunteer', 'User']);
+                                }
+
+                                return $query;
+                            })
+                            ->multiple()
+                            ->preload()
+                            ->searchable()
+                            ->label('Assign Roles'),
                     ])->columns(2),
 
                 Section::make('Membership Details')
@@ -75,10 +96,10 @@ class UserForm
                             ->prefix('৳'),
                         Select::make('status')
                             ->options([
-                                'pending'   => 'Pending',
-                                'active'    => 'Active',
+                                'pending' => 'Pending',
+                                'active' => 'Active',
                                 'suspended' => 'Suspended',
-                                'inactive'  => 'Inactive',
+                                'inactive' => 'Inactive',
                             ])
                             ->default('pending')
                             ->required(),

@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class ExpenseResource extends Resource
 {
@@ -32,6 +33,18 @@ class ExpenseResource extends Resource
         return ExpensesTable::configure($table);
     }
 
+    // 🛡️ Financial Security: Disable deleting a single expense
+    public static function canDelete(Model $record): bool 
+    {
+        return false;
+    }
+
+    // 🛡️ Financial Security: Disable bulk deleting expenses
+    public static function canDeleteAny(): bool 
+    {
+        return false;
+    }
+    
     public static function getPages(): array
     {
         return [

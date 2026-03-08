@@ -42,7 +42,6 @@ class ExpensesTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

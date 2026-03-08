@@ -25,25 +25,23 @@
 
             {{-- Desktop Nav --}}
             <div class="hidden md:flex space-x-5 lg:space-x-6 items-center text-sm font-semibold">
-                <a href="{{ route('home') }}" class="hover:text-blue-200 transition">Home</a>
-                <a href="{{ route('about') }}" class="hover:text-blue-200 transition">About</a>
-                <a href="{{ route('mission') }}" class="hover:text-blue-200 transition">Mission & Vision</a>
-                <a href="{{ route('projects.index') }}" class="hover:text-blue-200 transition">Projects</a>
-                <a href="{{ route('transparency') }}" class="hover:text-blue-200 transition">Transparency</a>
-                <a href="{{ route('volunteer') }}" class="hover:text-blue-200 transition">Volunteer</a>
-                <a href="{{ route('contact') }}" class="hover:text-blue-200 transition">Contact</a>
-                <a href="{{ route('receipt.search') }}" class="hover:text-blue-200 transition">Find Receipt</a>
+                <a href="{{ route('home') }}" class="hover:text-blue-200 transition">হোম</a>
+                <a href="{{ route('about') }}" class="hover:text-blue-200 transition">আমাদের সম্পর্কে</a>
+                <a href="{{ route('mission') }}" class="hover:text-blue-200 transition">মিশন ও ভিশন</a>
+                <a href="{{ route('projects.index') }}" class="hover:text-blue-200 transition">প্রকল্পসমূহ</a>
+                <a href="{{ route('transparency') }}" class="hover:text-blue-200 transition">স্বচ্ছতা</a>
+                <a href="{{ route('volunteer') }}" class="hover:text-blue-200 transition">স্বেচ্ছাসেবক</a>
+                <a href="{{ route('contact') }}" class="hover:text-blue-200 transition">যোগাযোগ</a>
+                <a href="{{ route('receipt.search') }}" class="hover:text-blue-200 transition">রিসিপ্ট খুঁজুন</a>
                 <a href="{{ route('donate.index') }}"
-                    class="bg-green-500 text-white px-5 py-2 rounded-full hover:bg-green-600 transition shadow-md">Donate
-                    Now</a>
+                    class="bg-green-500 text-white px-5 py-2 rounded-full hover:bg-green-600 transition shadow-md">দান করুন</a>
                 @guest
                     <a href="{{ route('login') }}"
-                        class="bg-white text-blue-600 px-4 py-2 rounded-md border border-blue-600 hover:bg-blue-50 transition shadow-sm font-bold">Login</a>
+                        class="bg-white text-blue-600 px-4 py-2 rounded-md border border-blue-600 hover:bg-blue-50 transition shadow-sm font-bold">লগিন</a>
                 @endguest
                 @auth
                     <a href="{{ route('donor.dashboard') }}"
-                        class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition shadow-sm font-bold">My
-                        Dashboard</a>
+                        class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition shadow-sm font-bold">ড্যাশবোর্ড</a>
                 @endauth
             </div>
 
@@ -62,17 +60,17 @@
         {{-- Mobile Menu --}}
         <div x-show="mobileMenuOpen" class="md:hidden bg-blue-700 px-4 pt-2 pb-4 space-y-2 text-sm font-semibold"
             style="display: none;">
-            <a href="{{ route('home') }}" class="block text-white py-2">Home</a>
-            <a href="{{ route('about') }}" class="block text-white py-2">About</a>
-            <a href="{{ route('mission') }}" class="block text-white py-2">Mission & Vision</a>
-            <a href="{{ route('projects.index') }}" class="block text-white py-2">Projects</a>
-            <a href="{{ route('transparency') }}" class="block text-white py-2">Transparency</a>
-            <a href="{{ route('volunteer') }}" class="block text-white py-2">Volunteer</a>
-            <a href="{{ route('contact') }}" class="block text-white py-2">Contact</a>
-            <a href="{{ route('receipt.search') }}" class="block text-white py-2">Find Receipt</a>
+            <a href="{{ route('home') }}" class="block text-white py-2">হোম</a>
+            <a href="{{ route('about') }}" class="block text-white py-2">আমাদের সম্পর্কে</a>
+            <a href="{{ route('mission') }}" class="block text-white py-2">মিশন ও ভিশন</a>
+            <a href="{{ route('projects.index') }}" class="block text-white py-2">প্রকল্পসমূহ</a>
+            <a href="{{ route('transparency') }}" class="block text-white py-2">স্বচ্ছতা</a>
+            <a href="{{ route('volunteer') }}" class="block text-white py-2">স্বেচ্ছাসেবক</a>
+            <a href="{{ route('contact') }}" class="block text-white py-2">যোগাযোগ</a>
+            <a href="{{ route('receipt.search') }}" class="block text-white py-2">রিসিপ্ট খুঁজুন</a>
             <a href="{{ route('donate.index') }}"
-                class="block bg-green-500 text-center text-white mt-2 py-2 rounded">Donate Now</a>
-            <a href="{{ url('/admin') }}" class="block bg-white text-blue-600 text-center mt-2 py-2 rounded">Login</a>
+                class="block bg-green-500 text-center text-white mt-2 py-2 rounded">দান করুন</a>
+            <a href="{{ route('login') }}" class="block bg-white text-blue-600 text-center mt-2 py-2 rounded">লগিন</a>
         </div>
     </nav>
 
@@ -109,18 +107,18 @@
             <div>
                 <h3 class="text-xl font-bold text-white mb-4">Quick Links</h3>
                 <ul class="space-y-2 text-sm">
-                    <li><a href="{{ route('home') }}" class="hover:text-gray-400 transition">Home</a></li>
-                    <li><a href="{{ route('about') }}" class="hover:text-gray-400 transition">About</a></li>
-                    <li><a href="{{ route('mission') }}" class="hover:text-gray-400 transition">Mission & Vision</a>
+                    <li><a href="{{ route('home') }}" class="hover:text-gray-400 transition">হোম</a></li>
+                    <li><a href="{{ route('about') }}" class="hover:text-gray-400 transition">আমাদের সম্পর্কে</a></li>
+                    <li><a href="{{ route('mission') }}" class="hover:text-gray-400 transition">মিশন ও ভিশন</a>
                     </li>
-                    <li><a href="{{ route('projects.index') }}" class="hover:text-gray-400 transition">Our Projects</a>
+                    <li><a href="{{ route('projects.index') }}" class="hover:text-gray-400 transition">প্রকল্পসমূহ</a>
                     </li>
-                    <li><a href="{{ route('transparency') }}" class="hover:text-gray-400 transition">Transparency</a>
+                    <li><a href="{{ route('transparency') }}" class="hover:text-gray-400 transition">স্বচ্ছতা</a>
                     </li>
-                    <li><a href="{{ route('volunteer') }}" class="hover:text-gray-400 transition">Become a Volunteer</a>
+                    <li><a href="{{ route('volunteer') }}" class="hover:text-gray-400 transition">স্বেচ্ছাসেবক</a>
                     </li>
-                    <li><a href="{{ route('contact') }}" class="hover:text-gray-400 transition">Contact Us</a></li>
-                    <li><a href="{{ url('/admin') }}" class="hover:text-gray-400 transition">Admin Login</a></li>
+                    <li><a href="{{ route('contact') }}" class="hover:text-gray-400 transition">যোগাযোগ</a></li>
+                    <li><a href="{{ url('/admin') }}" class="hover:text-gray-400 transition">এডমিন প্যানেল</a></li>
                 </ul>
             </div>
 
