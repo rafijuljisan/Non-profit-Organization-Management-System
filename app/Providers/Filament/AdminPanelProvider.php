@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            
+
             // 🎨 ১. থিম কালার আপডেট করা হলো (এনজিওর জন্য স্নিগ্ধ সবুজ/Emerald)
             ->colors([
                 'primary' => Color::Emerald,
@@ -38,34 +38,36 @@ class AdminPanelProvider extends PanelProvider
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
             ])
-            
+
             // 🔤 ২. আধুনিক ফন্ট যুক্ত করা হলো
             ->font('Poppins')
-            
+
             // 🏷️ ৩. ব্র্যান্ডিং: নাম, লোগো এবং ফেভিকন
             ->brandName('Foundation Management System') // আপনার এনজিওর নাম দিতে পারেন
             ->brandLogo(asset('images/logo.png'))       // public/images/ ফোল্ডারে logo.png রাখুন
             ->brandLogoHeight('3rem')
             ->favicon(asset('images/favicon.png'))      // public/images/ ফোল্ডারে favicon.png রাখুন
-            
+
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            
+
             // ✅ আপনার ম্যানুয়াল রিসোর্সগুলো ঠিক রাখা হয়েছে
             ->resources([
                 \App\Filament\Resources\Users\UserResource::class,
                 \App\Filament\Resources\Pages\PageResource::class,
-                \App\Filament\Resources\ActivityLogResource::class, 
+                \App\Filament\Resources\ActivityLogResource::class,
             ])
-            
+            ->plugins([
+                //\Filament\SpatieLaravelMediaLibraryPlugin\SpatieLaravelMediaLibraryPlugin::make(),
+            ])
             // ✅ আপনার ম্যানুয়াল উইজেটগুলো ঠিক রাখা হয়েছে
             ->widgets([
-                    //AccountWidget::class,
-                    //FilamentInfoWidget::class,
+                //AccountWidget::class,
+                //FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

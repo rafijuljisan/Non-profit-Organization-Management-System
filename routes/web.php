@@ -10,6 +10,7 @@ use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\DonorAuthController;
 use App\Http\Controllers\VolunteerController;
+use App\Http\Controllers\GalleryController;
 
 // 🟢 Guest Routes (লগইন ছাড়া দেখা যাবে)
 Route::middleware('guest')->group(function () {
@@ -51,6 +52,7 @@ Route::get('/find-receipts', [DonationController::class, 'searchReceipt'])->name
 Route::view('/about', 'pages.about')->name('about');
 Route::view('/mission-vision', 'pages.mission')->name('mission');
 Route::view('/financial-transparency', 'pages.transparency')->name('transparency');
+Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
 
 // Volunteer & Contact (We will create controllers for these later so users can submit forms)
 Route::get('/volunteer', [VolunteerController::class, 'index'])->name('volunteer'); // এই পেজে ভলান্টিয়ারদের তালিকা দেখানো হবে
