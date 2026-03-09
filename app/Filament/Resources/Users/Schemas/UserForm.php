@@ -47,6 +47,18 @@ class UserForm
                         TextInput::make('nid_number')
                             ->label('NID Number')
                             ->unique(ignoreRecord: true),
+                        Select::make('blood_group')
+                            ->options([
+                                'A+' => 'A+',
+                                'A-' => 'A-',
+                                'B+' => 'B+',
+                                'B-' => 'B-',
+                                'AB+' => 'AB+',
+                                'AB-' => 'AB-',
+                                'O+' => 'O+',
+                                'O-' => 'O-',
+                            ])
+                            ->placeholder('Select blood group'),
                         TextInput::make('password')
                             ->password()
                             ->dehydrated(fn(?string $state) => filled($state))

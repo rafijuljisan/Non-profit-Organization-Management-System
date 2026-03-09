@@ -8,6 +8,8 @@ use App\Observers\UserObserver;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Setting;
+use App\Models\Donation;
+use App\Observers\DonationObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,5 +40,6 @@ class AppServiceProvider extends ServiceProvider
             View::share('settings', $settings);
         }
         User::observe(UserObserver::class);
+        Donation::observe(DonationObserver::class);
     }
 }

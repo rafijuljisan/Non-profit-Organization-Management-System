@@ -61,9 +61,6 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Resources\Pages\PageResource::class,
                 \App\Filament\Resources\ActivityLogResource::class,
             ])
-            ->plugins([
-                //\Filament\SpatieLaravelMediaLibraryPlugin\SpatieLaravelMediaLibraryPlugin::make(),
-            ])
             // ✅ আপনার ম্যানুয়াল উইজেটগুলো ঠিক রাখা হয়েছে
             ->widgets([
                 //AccountWidget::class,

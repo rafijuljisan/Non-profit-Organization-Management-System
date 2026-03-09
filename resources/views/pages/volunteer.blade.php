@@ -17,23 +17,14 @@
     </div>
 </section>
 
-{{-- Team by Designation --}}
+{{-- Team Grid --}}
 <div class="max-w-7xl mx-auto px-4 py-14">
 
-    @forelse($volunteers as $designation => $members)
-    <div class="mb-16">
+    {{-- Single Grid for All Members --}}
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 mb-16">
 
-        {{-- Designation Header --}}
-        <div class="flex items-center gap-4 mb-8">
-            <div class="h-8 w-1.5 bg-blue-600 rounded-full flex-shrink-0"></div>
-            <h2 class="text-2xl font-extrabold text-blue-900">{{ $designation }}</h2>
-            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">
-                {{ $members->count() }} জন
-            </span>
-        </div>
-
-        {{-- Members Grid --}}
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+        {{-- Designated Members --}}
+        @forelse($volunteers as $designation => $members)
             @foreach($members as $member)
             <div class="bg-white border border-gray-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition group">
 
@@ -54,7 +45,8 @@
                 <p class="font-extrabold text-gray-800 text-sm leading-snug group-hover:text-blue-700 transition">
                     {{ $member->name }}
                 </p>
-                <p class="text-blue-600 text-xs font-semibold mt-1">{{ $member->designation }}</p>
+                <p class="text-blue-600 text-xs font-semibold mt-1">{{ $designation }}</p>
+                
                 @if($member->district)
                 <p class="text-gray-400 text-xs mt-1">{{ $member->district->name }}</p>
                 @endif
@@ -65,25 +57,15 @@
                 @endif
             </div>
             @endforeach
-        </div>
-    </div>
-    @empty
-    {{-- No volunteers yet --}}
-    @endforelse
+        @empty
+        @endforelse
 
-    {{-- General Members (no designation) --}}
-    @if($generalMembers->count() > 0)
-    <div class="mb-16">
-        <div class="flex items-center gap-4 mb-8">
-            <div class="h-8 w-1.5 bg-gray-400 rounded-full flex-shrink-0"></div>
-            <h2 class="text-2xl font-extrabold text-gray-700">সাধারণ সদস্যবৃন্দ</h2>
-            <span class="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1 rounded-full">
-                {{ $generalMembers->count() }} জন
-            </span>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+        {{-- General Members --}}
+        @if(isset($generalMembers) && $generalMembers->count() > 0)
             @foreach($generalMembers as $member)
             <div class="bg-white border border-gray-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition group">
+                
+                {{-- Photo --}}
                 <div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gray-100 bg-gray-50">
                     @if($member->photo)
                         <img src="{{ asset('storage/' . $member->photo) }}"
@@ -95,23 +77,28 @@
                         </div>
                     @endif
                 </div>
+
+                {{-- Info --}}
                 <p class="font-extrabold text-gray-800 text-sm leading-snug group-hover:text-blue-700 transition">
                     {{ $member->name }}
                 </p>
+                <p class="text-gray-500 text-xs font-semibold mt-1">সাধারণ সদস্য</p>
+                
                 @if($member->district)
                 <p class="text-gray-400 text-xs mt-1">{{ $member->district->name }}</p>
                 @endif
+                
                 @if($member->member_id)
                 <p class="text-gray-300 text-xs mt-2 font-mono">{{ $member->member_id }}</p>
                 @endif
             </div>
             @endforeach
-        </div>
+        @endif
+
     </div>
-    @endif
 
     {{-- Empty state --}}
-    @if($volunteers->isEmpty() && $generalMembers->count() === 0)
+    @if((!isset($volunteers) || $volunteers->isEmpty()) && (!isset($generalMembers) || $generalMembers->count() === 0))
     <div class="text-center py-20 text-gray-400">
         <p class="text-5xl mb-4">👥</p>
         <p class="font-bold text-gray-500 text-lg">এখনো কোনো স্বেচ্ছাসেবক যোগ দেননি।</p>

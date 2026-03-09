@@ -7,7 +7,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Facades\Auth; // <-- Auth Facade ইমপোর্ট করা হলো
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseForm
 {
@@ -32,11 +32,18 @@ class ExpenseForm
                             ->prefix('৳'),
                         Select::make('status')
                             ->options([
-                                'pending' => 'Pending',
-                                'approved' => 'Approved',
-                                'rejected' => 'Rejected',
+                                'pending' => 'Pending Approval (অপেক্ষমান)',
+                                'completed' => 'Approved & Paid (অনুমোদিত)',
+                                'rejected' => 'Rejected (বাতিল)',
                             ])
                             ->default('pending')
+                            // 🚀 FIXED: closure ব্যবহার করে User মডেল টাইপ-হিন্ট করে দেওয়া হলো
+                            ->disabled(function () {
+                                /** @var \App\Models\User|null $user */
+                                $user = Auth::user();
+                                return $user === null || !$user->hasRole('super_admin');
+                            }) 
+                            ->dehydrated() 
                             ->required(),
                     ])->columns(2),
 
@@ -44,7 +51,7 @@ class ExpenseForm
                     ->schema([
                         Select::make('created_by')
                             ->relationship('creator', 'name')
-                            ->default(fn () => Auth::id()) // <-- এখানে Auth::id() ব্যবহার করা হলো
+                            ->default(fn () => Auth::id())
                             ->required()
                             ->label('Created By'),
                         Select::make('approved_by')

@@ -25,6 +25,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/donor/dashboard', [DonorAuthController::class, 'dashboard'])->name('donor.dashboard');
     Route::post('/logout', [DonorAuthController::class, 'logout'])->name('logout');
 });
+Route::middleware(['auth'])->group(function () {
+    // মেম্বার আইডি কার্ড দেখার রাউট
+    Route::get('/member/{id}/id-card', [FrontendController::class, 'idCard'])->name('member.id-card');
+});
 // --- Existing Routes ---
 Route::get('/', function () {
     $totalMembers = User::where('status', 'active')->count();
