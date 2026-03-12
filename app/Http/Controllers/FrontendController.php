@@ -9,6 +9,7 @@ use App\Models\Expense;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Setting;
 
 
 
@@ -43,11 +44,16 @@ class FrontendController extends Controller
             'recentExpenses'
         ));
     }
+    public function contact()
+    {
+        $settings = Setting::first();
+        return view('contact', compact('settings'));
+    }
     // 🚀 NEW: মেম্বার আইডি কার্ড ডাউনলোড মেথড
     public function idCard($id)
     {
         $user = \App\Models\User::with('district')->findOrFail($id);
-        
+
         // যদি Settings মডেল থাকে
         // $settings = \App\Models\Setting::first(); 
 
@@ -63,7 +69,7 @@ class FrontendController extends Controller
             'fontdata' => [
                 'solaimanlipi' => [
                     'R' => 'SolaimanLipi.ttf',
-                    'B' => 'SolaimanLipi.ttf', 
+                    'B' => 'SolaimanLipi.ttf',
                     'I' => 'SolaimanLipi.ttf',
                     'BI' => 'SolaimanLipi.ttf',
                     'useOTL' => 0xFF,
@@ -76,13 +82,13 @@ class FrontendController extends Controller
         ]);
 
         // pdf.id_card ভিউ লোড করা
-        $html = view('pdf.id_card', compact('user'))->render(); 
+        $html = view('pdf.id_card', compact('user'))->render();
         $mpdf->WriteHTML($html);
 
         $filename = 'ID_Card_' . ($user->member_id ?? $user->id) . '.pdf';
 
         return response()->streamDownload(
-            fn () => print($mpdf->Output('', 'S')),
+            fn() => print ($mpdf->Output('', 'S')),
             $filename,
             ['Content-Type' => 'application/pdf']
         );

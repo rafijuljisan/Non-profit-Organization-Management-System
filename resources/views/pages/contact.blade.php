@@ -158,7 +158,7 @@
         </div>
 
     </div>
-
+    
     {{-- Bottom Trust Banner --}}
     <div class="mt-16 bg-blue-50 border border-blue-100 rounded-2xl px-8 py-10 text-center">
         <p class="text-blue-400 text-sm uppercase tracking-widest font-semibold mb-2">আমাদের প্রতিশ্রুতি</p>
@@ -184,6 +184,21 @@
             </div>
         </div>
     </div>
+
+    {{-- Google Map --}}
+    @if($settings->google_map_url ?? null)
+    <div class="mt-10 rounded-2xl overflow-hidden shadow-md border border-gray-100">
+        <iframe
+            src="{{ $settings->google_map_url }}"
+            width="100%"
+            height="300"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+    @endif
 
 </div>
 @endsection

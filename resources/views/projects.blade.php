@@ -66,7 +66,7 @@
                     {{-- Progress bar --}}
                     @if($project->target_budget > 0)
                     @php
-                        $collected = $project->donations_sum_amount ?? 0;
+                        $collected = $project->collected_amount ?? 0;
                         $percent = min(100, round(($collected / $project->target_budget) * 100));
                     @endphp
                     <div class="mb-4">

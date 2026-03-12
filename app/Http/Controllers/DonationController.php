@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Donation;
 use App\Models\Project;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use App\Models\Setting;
 
 class DonationController extends Controller
 {
@@ -91,6 +92,11 @@ class DonationController extends Controller
         );
     }
 
+    public function contact()
+    {
+        $settings = Setting::first();
+        return view('contact', compact('settings'));
+    }
     // ফোন নাম্বার দিয়ে রিসিট সার্চ করার মেথড
     public function searchReceipt(Request $request)
     {
