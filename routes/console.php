@@ -13,3 +13,6 @@ Schedule::command('members:auto-suspend')->monthlyOn(1, '00:00');
 
 // 🟢 NEW: WhatsApp Reminder Job (Runs on the 5th of every month at 10:00 AM)
 Schedule::job(new SendWhatsAppReminderJob)->monthlyOn(5, '10:00');
+
+// Run the sitemap generator every night at midnight
+Schedule::command('sitemap:generate')->daily();

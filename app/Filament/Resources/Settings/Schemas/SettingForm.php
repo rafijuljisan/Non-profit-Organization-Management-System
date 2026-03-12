@@ -29,6 +29,31 @@ class SettingForm
                         Textarea::make('address')->rows(2)->columnSpanFull(),
                     ])->columns(2),
 
+                // 🚀 NEW: SEO & Analytics Section
+                Section::make('SEO & Analytics')
+                    ->description('Manage search engine verification and tracking codes.')
+                    ->schema([
+                        TextInput::make('google_site_verification')
+                            ->label('Google Search Console ID')
+                            ->placeholder('e.g. dQw4w9WgXcQ...')
+                            ->helperText('Paste only the verification string, not the full HTML meta tag.'),
+                            
+                        TextInput::make('google_analytics_id')
+                            ->label('Google Analytics ID (G-XXXXXXX)')
+                            ->placeholder('e.g. G-1234567890'),
+                            
+                        Textarea::make('meta_description')
+                            ->label('Site Meta Description')
+                            ->placeholder('Brief description of your organization for search engines.')
+                            ->rows(2)
+                            ->columnSpanFull(),
+                            
+                        TextInput::make('meta_keywords')
+                            ->label('Site Meta Keywords')
+                            ->placeholder('e.g. charity, donation, blood bank, bangladesh')
+                            ->columnSpanFull(),
+                    ])->columns(2),
+
                 Section::make('Payment Information')
                     ->description('This information will be shown on the donation page.')
                     ->schema([
