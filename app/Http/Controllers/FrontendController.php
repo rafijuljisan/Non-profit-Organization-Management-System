@@ -10,11 +10,49 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Setting;
-
+use App\Models\Testimonial;
 
 
 class FrontendController extends Controller
 {
+    public function index()
+    {
+        //dd(Testimonial::all()->toArray());
+        $settings = Setting::first();
+        $testimonials = Testimonial::active()->get();
+
+        // Stats for dashboard section
+        $totalMembers = User::where('status', 'active')->count();
+        $totalFund = Donation::where('status', 'completed')->sum('amount');
+        $totalProjects = \App\Models\Project::count();
+        $totalDistricts = \App\Models\District::whereHas('projects')->count();
+
+        $totalDonations = Donation::where('status', 'completed')->sum('amount');
+        $totalExpenses = Expense::whereIn('status', ['completed', 'approved'])->sum('amount');
+
+        $ongoingProjects = \App\Models\Project::with('district')
+            ->where('status', 'ongoing')
+            ->get();
+
+        $recentDonations = Donation::with('project')
+            ->where('status', 'completed')
+            ->latest()
+            ->take(6)
+            ->get();
+
+        return view('welcome', compact(
+            'settings',
+            'testimonials',
+            'totalMembers',
+            'totalFund',
+            'totalProjects',
+            'totalDistricts',
+            'totalDonations',
+            'totalExpenses',
+            'ongoingProjects',
+            'recentDonations',
+        ));
+    }
     public function transparency()
     {
         // ১. আয়-ব্যয়ের হিসাব (Completed/Paid স্ট্যাটাস চেক করা বাধ্যতামূলক)

@@ -12,6 +12,9 @@ use App\Http\Controllers\DonorAuthController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\GalleryController;
 
+
+// ✅ This calls FrontendController@index which passes $testimonials
+Route::get('/', [FrontendController::class, 'index'])->name('home');
 // 🟢 Guest Routes (লগইন ছাড়া দেখা যাবে)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [DonorAuthController::class, 'showLogin'])->name('login');
@@ -30,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/member/{id}/id-card', [FrontendController::class, 'idCard'])->name('member.id-card');
 });
 // --- Existing Routes ---
-Route::get('/', function () {
+/*Route::get('/', function () {
     $totalMembers = User::where('status', 'active')->count();
     $totalProjects = Project::count();
     $totalDonations = Donation::where('status', 'completed')->sum('amount');
@@ -39,7 +42,7 @@ Route::get('/', function () {
     $ongoingProjects = Project::where('status', 'ongoing')->latest()->take(3)->get();
 
     return view('welcome', compact('totalMembers', 'totalProjects', 'totalFund', 'ongoingProjects'));
-})->name('home');
+})->name('home');*/
 
 Route::get('/projects', function () {
     $ongoingProjects = Project::with('district')->where('status', 'ongoing')->latest()->get();
