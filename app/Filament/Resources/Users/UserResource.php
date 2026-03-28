@@ -61,19 +61,21 @@ class UserResource extends Resource
     }
 
     // 🛡️ Data Security: Filter users based on Admin Role
+    // 🛡️ Data Security & Global Blood Donors Access
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-
         /** @var \App\Models\User|null $user */
         $user = Auth::user();
 
-        // If the user is logged in and has the 'District Admin' role, 
-        // they can only see users from their own district.
+        // District Admin নিজের জেলার ইউজারদের দেখতে পারবে, 
+        // তবে "ব্লাড ডোনার" হলে সারা বাংলাদেশের সবাইকে দেখতে পারবে।
         if ($user !== null && $user->hasRole('District Admin')) {
-            $query->where('district_id', $user->district_id);
+            $query->where(function ($q) use ($user) {
+                $q->where('district_id', $user->district_id)
+                  ->orWhere('is_blood_donor', true); // 🚀 যেকোনো জেলার ব্লাড ডোনার শো করবে
+            });
         }
-
         return $query;
     }
 }

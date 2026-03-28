@@ -9,6 +9,7 @@ use App\Filament\Resources\Districts\Schemas\DistrictForm;
 use App\Filament\Resources\Districts\Tables\DistrictsTable;
 use App\Models\District;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -19,6 +20,7 @@ class DistrictResource extends Resource
     protected static ?string $model = District::class;
     
     // আইকনের টাইপ ফিক্স করা হলো
+    protected static string|UnitEnum|null $navigationGroup = 'System Management';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

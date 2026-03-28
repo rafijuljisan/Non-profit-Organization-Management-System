@@ -29,6 +29,9 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            // 🚀 NEW: Blood Donation casts
+            'is_blood_donor' => 'boolean',
+            'last_donation_date' => 'date',
         ];
     }
 

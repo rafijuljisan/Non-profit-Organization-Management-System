@@ -3,13 +3,16 @@
 namespace App\Filament\Resources\Users\Schemas;
 
 use App\Models\Designation;
+use App\Models\Upazila;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
-use Illuminate\Database\Eloquent\Builder; // 🚀 এটি ইমপোর্ট করতে হবে
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class UserForm
@@ -47,36 +50,43 @@ class UserForm
                         TextInput::make('nid_number')
                             ->label('NID Number')
                             ->unique(ignoreRecord: true),
-                        Select::make('blood_group')
-                            ->options([
-                                'A+' => 'A+',
-                                'A-' => 'A-',
-                                'B+' => 'B+',
-                                'B-' => 'B-',
-                                'AB+' => 'AB+',
-                                'AB-' => 'AB-',
-                                'O+' => 'O+',
-                                'O-' => 'O-',
-                            ])
-                            ->placeholder('Select blood group'),
+
+                        Select::make('district_id')
+                            ->relationship('district', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->label('District'),
+
+                        Select::make('thana')
+                            ->label('Upazila / Thana')
+                            ->options(function (Get $get) {
+                                $districtId = $get('district_id');
+                                if (!$districtId) {
+                                    return [];
+                                }
+                                return Upazila::where('district_id', $districtId)->pluck('name', 'name');
+                            })
+                            ->searchable()
+                            ->preload(),
+
+                        TextInput::make('area')
+                            ->label('Specific Area / Union')
+                            ->maxLength(255),
+
                         TextInput::make('password')
                             ->password()
                             ->dehydrated(fn(?string $state) => filled($state))
                             ->required(fn(string $operation): bool => $operation === 'create')
                             ->columnSpanFull(),
+
                         Select::make('roles')
                             ->relationship('roles', 'name', modifyQueryUsing: function (Builder $query) {
                                 /** @var \App\Models\User|null $user */
                                 $user = Auth::user();
-
-                                // যদি বর্তমান ইউজার 'super_admin' না হয়, তবে সে রোল সিলেক্ট করার লিস্টে 'super_admin' অপশনটি দেখতে পাবে না।
                                 if ($user !== null && !$user->hasRole('super_admin')) {
                                     $query->where('name', '!=', 'super_admin');
-
-                                    // 💡 (ঐচ্ছিক) যদি চান District Admin শুধু সাধারণ User বা Volunteer তৈরি করতে পারবে, তবে নিচের লাইনটি ব্যবহার করতে পারেন:
-                                    // $query->whereIn('name', ['Volunteer', 'User']);
                                 }
-
                                 return $query;
                             })
                             ->multiple()
@@ -85,21 +95,34 @@ class UserForm
                             ->label('Assign Roles'),
                     ])->columns(2),
 
+                // 🩸 Blood Donation Section
+                Section::make('Blood Donation Details')
+                    ->schema([
+                        Toggle::make('is_blood_donor')
+                            ->label('Is a Blood Donor?')
+                            ->inline(false)
+                            ->default(false),
+                        Select::make('blood_group')
+                            ->options([
+                                'A+' => 'A+', 'A-' => 'A-', 'B+' => 'B+', 'B-' => 'B-',
+                                'AB+' => 'AB+', 'AB-' => 'AB-', 'O+' => 'O+', 'O-' => 'O-',
+                            ])
+                            ->placeholder('Select blood group'),
+                        DatePicker::make('last_donation_date')
+                            ->label('Last Donation Date')
+                            ->maxDate(now())
+                            ->displayFormat('d/m/Y'),
+                    ])->columns(3),
+
                 Section::make('Membership Details')
                     ->schema([
                         TextInput::make('member_id')
                             ->disabled()
                             ->dehydrated(false)
                             ->placeholder('Auto Generated on Save'),
-                        Select::make('district_id')
-                            ->relationship('district', 'name')
-                            ->searchable()
-                            ->preload(),
                         Select::make('designation')
                             ->label('Designation')
-                            ->options(
-                                Designation::orderBy('priority')->pluck('name', 'name')
-                            )
+                            ->options(Designation::orderBy('priority')->pluck('name', 'name'))
                             ->searchable()
                             ->placeholder('Select designation'),
                         TextInput::make('monthly_fee')

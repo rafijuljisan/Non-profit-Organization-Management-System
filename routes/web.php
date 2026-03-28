@@ -11,6 +11,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\DonorAuthController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\BloodBankController;
 
 
 // ✅ This calls FrontendController@index which passes $testimonials
@@ -26,6 +27,10 @@ Route::middleware('guest')->group(function () {
 // 🟢 Auth Routes (লগইন করার পর দেখা যাবে)
 Route::middleware('auth')->group(function () {
     Route::get('/donor/dashboard', [DonorAuthController::class, 'dashboard'])->name('donor.dashboard');
+    
+    // 🚀 NEW: ব্লাড প্রোফাইল আপডেটের রাউট
+    Route::post('/donor/blood-profile', [DonorAuthController::class, 'updateBloodProfile'])->name('donor.update_blood_profile');
+    
     Route::post('/logout', [DonorAuthController::class, 'logout'])->name('logout');
 });
 Route::middleware(['auth'])->group(function () {
@@ -71,3 +76,7 @@ Route::post('/inquiry/submit', [InquiryController::class, 'store'])
     ->middleware('throttle:3,1'); // প্রতি মিনিটে সর্বোচ্চ ৩টি মেসেজ
 
 Route::get('/financial-transparency', [FrontendController::class, 'transparency'])->name('transparency');
+
+// Blood Bank Route
+Route::get('/blood-bank', [BloodBankController::class, 'index'])->name('blood_bank.index');
+Route::get('/get-thanas/{district_id}', [App\Http\Controllers\BloodBankController::class, 'getThanas']);

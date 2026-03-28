@@ -222,7 +222,7 @@
                 @foreach([
                     ['home', 'হোম'],
                     ['about', 'আমাদের সম্পর্কে'],
-                    ['mission', 'মিশন ও ভিশন'],
+                    ['blood_bank.index', 'ব্লাড ব্যাংক'],
                     ['projects.index', 'প্রকল্পসমূহ'],
                     ['gallery', 'গ্যালারি'],
                     ['transparency', 'স্বচ্ছতা'],
@@ -275,6 +275,7 @@
             @foreach([
                 ['home', 'হোম'],
                 ['about', 'আমাদের সম্পর্কে'],
+                ['blood_bank.index', 'ব্লাড ব্যাংক'],
                 ['mission', 'মিশন ও ভিশন'],
                 ['projects.index', 'প্রকল্পসমূহ'],
                 ['gallery', 'গ্যালারি'],
