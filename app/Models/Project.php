@@ -15,6 +15,14 @@ class Project extends Model
 
     protected $guarded = [];
 
+    // 🚀 NEW: JSON কলামগুলোকে Array তে কনভার্ট করার জন্য
+    protected $casts = [
+        'objectives' => 'array',
+        'expense_sectors' => 'array',
+        'gallery' => 'array',
+        'faqs' => 'array',
+    ];
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

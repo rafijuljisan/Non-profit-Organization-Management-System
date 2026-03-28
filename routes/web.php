@@ -54,6 +54,7 @@ Route::get('/projects', function () {
     $completedProjects = Project::with('district')->where('status', 'completed')->latest()->get();
     return view('projects', compact('ongoingProjects', 'completedProjects'));
 })->name('projects.index');
+Route::get('/projects/{id}/details', [FrontendController::class, 'projectDetails'])->name('projects.details');
 
 Route::get('/donate', [DonationController::class, 'index'])->name('donate.index');
 Route::post('/donate', [DonationController::class, 'store'])->name('donate.store')->middleware('throttle:5,1');

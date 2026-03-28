@@ -87,6 +87,17 @@ class FrontendController extends Controller
         $settings = Setting::first();
         return view('contact', compact('settings'));
     }
+
+    // 🚀 NEW: Project Details Method
+    public function projectDetails($id)
+    {
+        $project = \App\Models\Project::with('district')->findOrFail($id);
+        
+        // টাইটেল এর জন্য সেটিংস
+        $settings = \App\Models\Setting::first();
+        
+        return view('pages.project_details', compact('project', 'settings'));
+    }
     // 🚀 NEW: মেম্বার আইডি কার্ড ডাউনলোড মেথড
     public function idCard($id)
     {
