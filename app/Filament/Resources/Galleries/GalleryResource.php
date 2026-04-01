@@ -42,4 +42,5 @@ class GalleryResource extends Resource
             'edit'   => EditGallery::route('/{record}/edit'),
         ];
     }
+    
 }

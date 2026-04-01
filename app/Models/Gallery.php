@@ -26,6 +26,11 @@ class Gallery extends Model implements HasMedia
             ->singleFile()
             ->useDisk('public')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
+
+        // ── ADD THIS for bulk upload ──
+        $this->addMediaCollection('bulk_photos')
+            ->useDisk('public')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
     }
 
     public function registerMediaConversions(?Media $media = null): void
@@ -45,26 +50,33 @@ class Gallery extends Model implements HasMedia
     // ─── Accessors ────────────────────────────────────────
 
     public function getPhotoUrlAttribute(): ?string
-{
-    $media = $this->getFirstMedia('photo');
-    if (!$media) return null;
+    {
+        $media = $this->getFirstMedia('photo');
+        if (!$media)
+            return null;
 
-    $url = $media->getUrl();
-    return str_starts_with($url, 'http') ? $url : url($url);
-}
+        $url = $media->getUrl();
+        return str_starts_with($url, 'http') ? $url : url($url);
+    }
 
-public function getThumbUrlAttribute(): ?string
-{
-    $media = $this->getFirstMedia('photo');
-    if (!$media) return null;
+    public function getThumbUrlAttribute(): ?string
+    {
+        $media = $this->getFirstMedia('photo');
+        if (!$media)
+            return null;
 
-    $url = $media->getUrl();
-    return str_starts_with($url, 'http') ? $url : url($url);
-}
+        // Use thumb conversion if it exists, fallback to original
+        $url = $media->hasGeneratedConversion('thumb')
+            ? $media->getUrl('thumb')
+            : $media->getUrl();
+
+        return str_starts_with($url, 'http') ? $url : url($url);
+    }
 
     public function getEmbedUrlAttribute(): ?string
     {
-        if (!$this->video_url) return null;
+        if (!$this->video_url)
+            return null;
 
         if ($this->type === 'youtube') {
             $id = $this->extractYoutubeId($this->video_url);

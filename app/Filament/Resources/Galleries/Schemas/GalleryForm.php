@@ -22,8 +22,8 @@ class GalleryForm
                         Select::make('type')
                             ->label('Media Type')
                             ->options([
-                                'photo'    => '🖼️ Photo',
-                                'youtube'  => '▶️ YouTube Video',
+                                'photo' => '🖼️ Photo',
+                                'youtube' => '▶️ YouTube Video',
                                 'facebook' => '📘 Facebook Video',
                             ])
                             ->default('photo')
@@ -80,8 +80,34 @@ class GalleryForm
                                 }
                             }),
                     ])
-                    ->visible(fn ($get) => $get('type') === 'photo'),
+                    ->visible(fn($get) => $get('type') === 'photo'),
 
+                // Add this Section after the existing Photo Upload section
+
+                Section::make('Bulk Photo Upload')
+                    ->schema([
+                        TextInput::make('bulk_category')
+                            ->label('Category for all these photos')
+                            ->placeholder('e.g. ঈদ সামগ্রী বিতরণ-২০২৬')
+                            // 🚨 Fix: Removed the \Filament\Forms\Get type-hint
+                            ->required(fn ($get) => filled($get('bulk_photo_files')))
+                            ->dehydrated(false) 
+                            ->columnSpanFull(),
+
+                        \Filament\Forms\Components\FileUpload::make('bulk_photo_files')
+                            ->label('Upload Multiple Photos')
+                            ->multiple()
+                            ->image()
+                            ->disk('public')
+                            ->directory('gallery/bulk')
+                            ->maxFiles(50)
+                            ->storeFiles(false)  
+                            ->dehydrated(false) 
+                            ->columnSpanFull()
+                            ->helperText('Select multiple photos — each will become a separate gallery entry.'),
+                    ])
+                    // 🚨 Fix: Removed the \Filament\Forms\Get type-hint
+                    ->visible(fn (string $operation, $get) => $operation === 'create' && $get('type') === 'photo'),
                 // ── Video URL ────────────────────────────────
                 Section::make('Video URL')
                     ->schema([
@@ -92,7 +118,7 @@ class GalleryForm
                             ->columnSpanFull()
                             ->helperText('Paste the full YouTube or Facebook video URL.'),
                     ])
-                    ->visible(fn ($get) => in_array($get('type'), ['youtube', 'facebook'])),
+                    ->visible(fn($get) => in_array($get('type'), ['youtube', 'facebook'])),
 
                 // ── Visibility ───────────────────────────────
                 Section::make('Visibility')
