@@ -32,6 +32,7 @@ class UsersTable
                     ->circular()
                     ->size(40),
                 TextColumn::make('name')->searchable(),
+                TextColumn::make('designation')->searchable(),
                 TextColumn::make('phone')->searchable(),
                 TextColumn::make('district.name')->sortable()->searchable(),
 

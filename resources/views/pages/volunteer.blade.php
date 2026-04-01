@@ -29,31 +29,38 @@
             <div class="bg-white border border-gray-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition group">
 
                 {{-- Photo --}}
-                <div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-blue-100 bg-blue-50">
+                <div class="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden border-2 border-blue-100 bg-blue-50">
                     @if($member->photo)
                         <img src="{{ asset('storage/' . $member->photo) }}"
                             alt="{{ $member->name }}"
                             class="w-full h-full object-cover">
                     @else
-                        <div class="w-full h-full flex items-center justify-center text-2xl font-extrabold text-blue-300">
-                            {{ mb_substr($member->name, 0, 1) }}
-                        </div>
+                        <img src="{{ asset('images/avatar.png') }}" 
+                            alt="avatar" 
+                            class="w-full h-full object-cover">
                     @endif
                 </div>
 
                 {{-- Info --}}
-                <p class="font-extrabold text-gray-800 text-sm leading-snug group-hover:text-blue-700 transition">
+                {{-- Info --}}
+                <p class="font-extrabold text-gray-800 text-base leading-snug group-hover:text-blue-700 transition">
                     {{ $member->name }}
                 </p>
-                <p class="text-blue-600 text-xs font-semibold mt-1">{{ $designation }}</p>
-                
+                <p class="text-blue-600 text-sm font-semibold mt-1">{{ $designation }}</p>
+
+                @if($member->phone)
+                <a href="tel:{{ $member->phone }}" class="text-gray-500 text-sm mt-1 hover:text-blue-600 transition block">
+                    📞 {{ $member->phone }}
+                </a>
+                @endif
+
                 @if($member->district)
-                <p class="text-gray-400 text-xs mt-1">{{ $member->district->name }}</p>
+                <p class="text-gray-400 text-sm mt-1">{{ $member->district->name }}</p>
                 @endif
 
                 {{-- Member ID --}}
                 @if($member->member_id)
-                <p class="text-gray-300 text-xs mt-2 font-mono">{{ $member->member_id }}</p>
+                <p class="text-gray-300 text-sm mt-2 font-mono">{{ $member->member_id }}</p>
                 @endif
             </div>
             @endforeach
@@ -66,15 +73,15 @@
             <div class="bg-white border border-gray-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition group">
                 
                 {{-- Photo --}}
-                <div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gray-100 bg-gray-50">
+                <div class="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gray-100 bg-gray-50">
                     @if($member->photo)
                         <img src="{{ asset('storage/' . $member->photo) }}"
                             alt="{{ $member->name }}"
                             class="w-full h-full object-cover">
                     @else
-                        <div class="w-full h-full flex items-center justify-center text-2xl font-extrabold text-gray-300">
-                            {{ mb_substr($member->name, 0, 1) }}
-                        </div>
+                        <img src="{{ asset('images/avatar.png') }}" 
+                            alt="avatar" 
+                            class="w-full h-full object-cover">
                     @endif
                 </div>
 
