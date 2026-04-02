@@ -19,7 +19,20 @@ class ActivityLogResource extends Resource
     protected static string|UnitEnum|null $navigationGroup = 'System Management';
     protected static ?string $navigationLabel = 'Activity Logs';
 
-    // Activity Log সাধারণত কেউ এডিট বা ক্রিয়েট করতে পারে না, তাই এগুলো false করে দেওয়া হলো
+    public static function canViewAny(): bool
+    {
+        /** @var \Illuminate\Contracts\Auth\Guard $auth */
+        $auth = auth();
+
+        /** @var \App\Models\User|null $user */
+        $user = $auth->user();
+
+        if (!$user) return false;
+
+        return $user->hasRole('super_admin')
+            || $user->hasPermissionTo('activity_view');
+    }
+
     public static function canCreate(): bool { return false; }
     public static function canEdit($record): bool { return false; }
     public static function canDelete($record): bool { return false; }
