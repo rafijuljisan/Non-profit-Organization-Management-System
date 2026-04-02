@@ -49,10 +49,12 @@ class User extends Authenticatable implements FilamentUser
     {
         // শর্ত ১: ইউজারের স্ট্যাটাস 'active' হতে হবে
         // শর্ত ২: ইউজারের ইমেইল থাকতে হবে (কারণ সাধারণ ডোনাররা ইমেইল ছাড়া অ্যাকাউন্ট খোলে)
-        return $this->status === 'active' && !empty($this->email);
+        // return $this->status === 'active' && !empty($this->email);
 
         // 💡 (বিকল্প লজিক): আপনি যেহেতু Spatie Roles ব্যবহার করছেন, চাইলে নিচের লাইনটিও ব্যবহার করতে পারেন:
         // return $this->status === 'active' && $this->hasRole(['admin', 'super_admin']);
+
+        return $this->roles()->exists();
     }
 
     public function district(): BelongsTo

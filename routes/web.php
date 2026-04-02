@@ -27,9 +27,11 @@ Route::middleware('guest')->group(function () {
 // 🟢 Auth Routes (লগইন করার পর দেখা যাবে)
 Route::middleware('auth')->group(function () {
     Route::get('/donor/dashboard', [DonorAuthController::class, 'dashboard'])->name('donor.dashboard');
-    
-    // 🚀 NEW: ব্লাড প্রোফাইল আপডেটের রাউট
     Route::post('/donor/blood-profile', [DonorAuthController::class, 'updateBloodProfile'])->name('donor.update_blood_profile');
+    
+    // 🆕 Profile edit routes
+    Route::get('/donor/profile/edit', [DonorAuthController::class, 'editProfile'])->name('donor.profile.edit');
+    Route::post('/donor/profile/update', [DonorAuthController::class, 'updateProfile'])->name('donor.profile.update');
     
     Route::post('/logout', [DonorAuthController::class, 'logout'])->name('logout');
 });
