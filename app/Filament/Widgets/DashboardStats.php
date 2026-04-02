@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardStats extends BaseWidget
 {
+    public static function canView(): bool
+    {
+        /** @var \Illuminate\Contracts\Auth\Guard $auth */
+        $auth = auth();
+        /** @var \App\Models\User|null $user */
+        $user = $auth->user();
+        
+        // Only super_admin or admin can see this widget. 
+        // The blood_secretary will be blocked.
+        return $user && $user->hasAnyRole(['super_admin', 'admin']);
+    }
     protected static ?int $sort = 1;
 
     protected function getStats(): array

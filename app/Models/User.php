@@ -12,6 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use App\Models\BloodDonationHistory;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -70,5 +71,12 @@ class User extends Authenticatable implements FilamentUser
     public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);
+    }
+    /**
+     * Get the donation histories for the user.
+     */
+    public function donationHistories()
+    {
+        return $this->hasMany(BloodDonationHistory::class); 
     }
 }

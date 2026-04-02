@@ -13,20 +13,21 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         $resources = [
-            'user'        => ['view', 'create', 'edit', 'delete'],
-            'donation'    => ['view', 'create', 'edit', 'delete'],
-            'project'     => ['view', 'create', 'edit', 'delete'],
-            'expense'     => ['view', 'create', 'edit', 'delete'],
-            'subscription'=> ['view', 'create', 'edit', 'delete'],
-            'gallery'     => ['view', 'create', 'edit', 'delete'],
-            'inquiry'     => ['view', 'delete'],
-            'page'        => ['view', 'create', 'edit', 'delete'],
-            'setting'     => ['view', 'edit'],
+            'user' => ['view', 'create', 'edit', 'delete'],
+            'donation' => ['view', 'create', 'edit', 'delete'],
+            'project' => ['view', 'create', 'edit', 'delete'],
+            'expense' => ['view', 'create', 'edit', 'delete'],
+            'subscription' => ['view', 'create', 'edit', 'delete'],
+            'gallery' => ['view', 'create', 'edit', 'delete'],
+            'inquiry' => ['view', 'delete'],
+            'page' => ['view', 'create', 'edit', 'delete'],
+            'setting' => ['view', 'edit'],
             'testimonial' => ['view', 'create', 'edit', 'delete'],
             'designation' => ['view', 'create', 'edit', 'delete'],
-            'district'    => ['view', 'create', 'edit', 'delete'],
-            'upazila'     => ['view', 'create', 'edit', 'delete'],
-            'activity'    => ['view'],  // logs are read-only
+            'district' => ['view', 'create', 'edit', 'delete'],
+            'upazila' => ['view', 'create', 'edit', 'delete'],
+            'activity' => ['view'],  // logs are read-only
+            'blood_donor' => ['manage'],
         ];
 
         foreach ($resources as $resource => $actions) {
@@ -46,13 +47,24 @@ class RolesAndPermissionsSeeder extends Seeder
         $editor = Role::firstOrCreate(['name' => 'editor']);
         $editor->syncPermissions([
             'donation_view',
-            'project_view', 'project_create', 'project_edit',
+            'project_view',
+            'project_create',
+            'project_edit',
             'expense_view',
             'subscription_view',
-            'gallery_view', 'gallery_create', 'gallery_edit', 'gallery_delete',
-            'inquiry_view', 'inquiry_delete',
-            'page_view', 'page_create', 'page_edit',
-            'testimonial_view', 'testimonial_create', 'testimonial_edit', 'testimonial_delete',
+            'gallery_view',
+            'gallery_create',
+            'gallery_edit',
+            'gallery_delete',
+            'inquiry_view',
+            'inquiry_delete',
+            'page_view',
+            'page_create',
+            'page_edit',
+            'testimonial_view',
+            'testimonial_create',
+            'testimonial_edit',
+            'testimonial_delete',
         ]);
 
         // viewer — read only
@@ -67,6 +79,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'gallery_view',
             'activity_view',
         ]);
+
+        // Add this after the $viewer role section
+        $bloodSecretary = Role::firstOrCreate(['name' => 'blood_secretary']);
+        $bloodSecretary->syncPermissions(['blood_donor_manage']);
 
         $this->command->info('✅ All roles and permissions seeded.');
     }

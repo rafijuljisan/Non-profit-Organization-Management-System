@@ -10,6 +10,17 @@ use Illuminate\Support\HtmlString;
 
 class CampaignProgressWidget extends BaseWidget
 {
+    public static function canView(): bool
+    {
+        /** @var \Illuminate\Contracts\Auth\Guard $auth */
+        $auth = auth();
+        /** @var \App\Models\User|null $user */
+        $user = $auth->user();
+        
+        // Only super_admin or admin can see this widget. 
+        // The blood_secretary will be blocked.
+        return $user && $user->hasAnyRole(['super_admin', 'admin']);
+    }
     // ড্যাশবোর্ডে পুরো জায়গা জুড়ে দেখানোর জন্য
     protected int | string | array $columnSpan = 'full';
     

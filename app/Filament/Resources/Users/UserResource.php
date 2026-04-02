@@ -16,6 +16,8 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\Users\UserResource\RelationManagers\DonationHistoriesRelationManager;
+
 
 class UserResource extends Resource
 {
@@ -60,6 +62,12 @@ class UserResource extends Resource
         ];
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            DonationHistoriesRelationManager::class,
+        ];
+    }
     // 🛡️ Data Security: Filter users based on Admin Role
     // 🛡️ Data Security & Global Blood Donors Access
     public static function getEloquentQuery(): Builder
@@ -73,7 +81,7 @@ class UserResource extends Resource
         if ($user !== null && $user->hasRole('District Admin')) {
             $query->where(function ($q) use ($user) {
                 $q->where('district_id', $user->district_id)
-                  ->orWhere('is_blood_donor', true); // 🚀 যেকোনো জেলার ব্লাড ডোনার শো করবে
+                    ->orWhere('is_blood_donor', true); // 🚀 যেকোনো জেলার ব্লাড ডোনার শো করবে
             });
         }
         return $query;

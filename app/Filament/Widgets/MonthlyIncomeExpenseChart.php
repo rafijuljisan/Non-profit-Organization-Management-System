@@ -11,6 +11,17 @@ use Illuminate\Support\Facades\Auth;
 
 class MonthlyIncomeExpenseChart extends ChartWidget
 {
+    public static function canView(): bool
+    {
+        /** @var \Illuminate\Contracts\Auth\Guard $auth */
+        $auth = auth();
+        /** @var \App\Models\User|null $user */
+        $user = $auth->user();
+        
+        // Only super_admin or admin can see this widget. 
+        // The blood_secretary will be blocked.
+        return $user && $user->hasAnyRole(['super_admin', 'admin']);
+    }
     protected ?string $heading = 'Monthly Income vs Expense (Current Year)';
     protected static ?int $sort = 2;
 

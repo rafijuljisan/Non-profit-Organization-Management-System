@@ -38,6 +38,7 @@ use App\Policies\DesignationPolicy;
 use App\Policies\DistrictPolicy;
 use App\Policies\UpazilaPolicy;
 use App\Policies\ActivityPolicy;
+use App\Policies\BloodDonorPolicy;
 
 // Observers
 use App\Observers\UserObserver;
@@ -67,6 +68,11 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(District::class,     DistrictPolicy::class);
         Gate::policy(Upazila::class,      UpazilaPolicy::class);
         Gate::policy(Activity::class,     ActivityPolicy::class);
+
+        // Add this inside boot() with other Gate::policy calls
+        // Note: BloodDonorResource uses User model but with its own policy
+        // We register it via canViewAny/canEdit directly in the resource
+        // so no Gate::policy needed here — it's self-contained
 
         // ── Global Settings ──
         if (Schema::hasTable('settings')) {
