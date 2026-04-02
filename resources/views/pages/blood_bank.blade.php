@@ -10,7 +10,12 @@
 
     /* ===== Custom CSS for Blood Bank ===== */
     body { background-color: #f8fafc; }
-    
+    /* 🩸 Modal Styles */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+.modal-content { background: white; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+.modal-header { font-size: 20px; font-weight: bold; margin-bottom: 15px; color: #d32f2f; }
+.modal-close { cursor: pointer; float: right; font-size: 24px; color: #6b7280; line-height: 20px; }
+.btn-submit-request { background: #d32f2f; color: white; width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     /* 🩸 Hero Section (2-Column Layout) */
     .blood-bank-hero { 
         background-color: #d32f2f; 
@@ -276,18 +281,23 @@
         </div>
 
         <div class="card-actions">
-            <a href="tel:{{ $donor->phone }}" class="btn-action call">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                </svg>
-                কল
-            </a>
-            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $donor->phone) }}" target="_blank" class="btn-action request">
-                <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
-                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-                </svg>
-                রিকোয়েস্ট
-            </a>
+            @php
+                // Check if the logged-in user has permissions to bypass privacy
+                $canCallDirectly = auth()->check() && auth()->user()->hasAnyRole(['super_admin', 'admin', 'blood_secretary']);
+            @endphp
+
+            @if($canCallDirectly)
+                <a href="tel:{{ $donor->phone }}" class="btn-action call">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    সরাসরি কল
+                </a>
+            @else
+                <button onclick="openRequestModal({{ $donor->id }}, '{{ $donor->name }}')" class="btn-action request" style="grid-column: 1 / -1; background: #fef2f2; border-color: #fca5a5;">
+                    🩸 Blood Request পাঠান
+                </button>
+            @endif
         </div>
 
     </div>
@@ -305,7 +315,37 @@
 <div style="max-width: 1050px; margin: 0 auto 50px auto; padding: 0 15px;">
     {{ $donors->withQueryString()->links() }}
 </div>
-
+<div class="modal-overlay" id="requestModal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeRequestModal()">&times;</span>
+        <div class="modal-header">রক্তের জন্য আবেদন - <span id="donorNameSpan"></span></div>
+        <form id="bloodRequestForm">
+            @csrf
+            <input type="hidden" name="donor_id" id="modalDonorId">
+            <div class="form-group">
+                <label>আপনার নাম</label>
+                <input type="text" name="requester_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>আপনার ফোন নম্বর</label>
+                <input type="text" name="requester_phone" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>রোগীর নাম</label>
+                <input type="text" name="patient_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>হাসপাতালের নাম ও ঠিকানা</label>
+                <input type="text" name="hospital_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>কত ব্যাগ প্রয়োজন?</label>
+                <input type="number" name="bags_needed" class="form-control" min="1" value="1" required>
+            </div>
+            <button type="submit" class="btn-submit-request">রিকোয়েস্ট পাঠান</button>
+        </form>
+    </div>
+</div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const districtSelect = document.querySelector('select[name="district_id"]');
@@ -340,4 +380,80 @@
     });
 </script>
 
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function openRequestModal(donorId, donorName) {
+        document.getElementById('modalDonorId').value = donorId;
+        document.getElementById('donorNameSpan').innerText = donorName;
+        document.getElementById('requestModal').style.display = 'flex';
+    }
+
+    function closeRequestModal() {
+        document.getElementById('requestModal').style.display = 'none';
+    }
+
+    document.getElementById('bloodRequestForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        let formData = new FormData(this);
+        
+        // বাটন ডিজেবল করে দেওয়া যাতে ইউজার বারবার ক্লিক না করতে পারে
+        let submitBtn = this.querySelector('.btn-submit-request');
+        let originalText = submitBtn.innerText;
+        submitBtn.innerText = 'পাঠানো হচ্ছে...';
+        submitBtn.disabled = true;
+
+        fetch("{{ route('blood_request.store') }}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(async response => {
+            const data = await response.json();
+            // যদি রেসপন্স ওকে না হয় (যেমন ভ্যালিডেশন এরর 422), তাহলে error throw করবে
+            if (!response.ok) {
+                throw data;
+            }
+            return data;
+        })
+        .then(data => {
+            closeRequestModal();
+            this.reset();
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+            
+            if(data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'রিকোয়েস্ট পাঠানো হয়েছে!',
+                    html: `ডোনারকে জানানো হয়েছে। তিনি একসেপ্ট করলে আপনার কাছে ফোন নম্বর চলে আসবে।<br><br>
+                           <b>খুবই জরুরি হলে ব্লাড সেক্রেটারিকে কল করুন:</b><br>
+                           <a href="tel:${data.secretary_phone}" style="font-size: 22px; font-weight: bold; color: #d32f2f; text-decoration: none; display: inline-block; margin-top: 10px;">📞 ${data.secretary_phone}</a>`,
+                    confirmButtonColor: '#d32f2f',
+                    confirmButtonText: 'ঠিক আছে'
+                });
+            }
+        })
+        .catch(error => {
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+
+            let errorMessage = 'কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।';
+            
+            // লারাভেল থেকে আসা ভ্যালিডেশন এরর ধরার জন্য
+            if (error.errors) {
+                // প্রথম এরর মেসেজটি বের করে আনা
+                errorMessage = Object.values(error.errors)[0][0]; 
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+
+            Swal.fire('ত্রুটি!', errorMessage, 'error');
+        });
+    });
+</script>
 @endsection

@@ -82,4 +82,5 @@ Route::get('/financial-transparency', [FrontendController::class, 'transparency'
 
 // Blood Bank Route
 Route::get('/blood-bank', [BloodBankController::class, 'index'])->name('blood_bank.index');
+Route::post('/blood-request', [\App\Http\Controllers\BloodBankController::class, 'storeRequest'])->name('blood_request.store');
 Route::get('/get-thanas/{district_id}', [App\Http\Controllers\BloodBankController::class, 'getThanas']);
